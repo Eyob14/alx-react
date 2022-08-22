@@ -3,50 +3,53 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-    mode: 'development',
-    entry : path.resolve(__dirname, 'js/dashboard_main.js'),
-    output: {
-      path: path.resolve(__dirname, 'public'),
-      filename: 'bundle.js'
-    },
-    optimization: {
-      splitChunks: {
-        chunks: 'all',
-      },
-    },
-    performance: {
-      maxAssetSize: 1000000,
-    },
-    devServer: {
-      contentBase: path.join(__dirname, './public'),
-      compress: true,
-      port: 8564,
-    },
-    plugins: [
-      new HTMLWebpackPlugin({
-        filename: 'public/index.html'
-      }),
-      new CleanWebpackPlugin()
-    ],
-    module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
-      },
-      {
-        test: /\.(jpg|gif|png|jpeg|svg)$/i,
-        use: [
-          "file-loader",
-          {
-            loader: "image-webpack-loader",
-            options: {
-              bypassOnDebug: true,
-              disable: true,
-            },
-          },
-        ],
-      }
-    ]
-  }
-}
+	mode: 'development',
+	entry: {
+		all: [
+			'./modules/header/header.js',
+			'./modules/body/body.js',
+			'./modules/footer/footer.js',
+		]
+	},
+	output: {
+		filename: '[name].bundle.js',
+		path: path.resolve(__dirname, 'public')
+	},
+	module: {
+		rules: [
+			{
+				test: /\.css$/,
+				use: ['style-loader', 'css-loader']
+			},
+			{
+				test: /\.(png|jpe?g|gif)$/i,
+				use: [
+					'file-loader',
+					{
+						loader: 'image-webpack-loader',
+						options: {
+							bypassOnDebug: true,
+							disable: true
+						},
+					},
+				],
+			},
+		]
+	},
+	devtool: 'inline-source-map',
+	devServer: {
+		static: path.join(__dirname, './public'),
+		compress: true,
+		port: 8564
+	},
+	plugins: [
+		new CleanWebpackPlugin(), // clean the public folder before building
+		new HtmlWebpackPlugin() // Generates default index.html
+	],
+	optimization: {
+		splitChunks: {
+			chunks: 'all' // split all chunks
+		}
+	}
+	
+};

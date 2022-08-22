@@ -1,18 +1,21 @@
-'use strict';
-const $ = require('jquery');
-const _ = require('lodash');
+// interesting jquery import thanks to babel
+import $ from 'jquery';
+// import lodash
+import _ from 'lodash';
+// styles
 import './body.css';
 
-$('body').append('<p>Dashboard data for the students</p>');
-$('body').append('<button>Click here to get started</button>');
-$('body').append('<p id="count"></p>');
+// append elements
+$('body').append(`<p>Dashboard data for the students</p>`);
+$('body').append(`<button>Click here to get started</button>`);
+$('body').append(`<p id="count"></p>`);
 
+// bind lodash's debounce to the button
+$('button').on('click', _.debounce(updateCounter, 500));
+
+let count  = 0;
+// function to update the counter
 function updateCounter() {
-  let times = $('#count').html() || 0;
-  $('button').on('click', () => {
-    times++;
-    $('#count').html(`${times} clicks on the button`);
-  });
-};
-
-_.debounce(updateCounter(), 500);
+	count++;
+	$('#count').text(`${count} clicks on the button`);
+}
